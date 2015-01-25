@@ -9,7 +9,10 @@
 import java.io.UnsupportedEncodingException;
 import javax.swing.table.AbstractTableModel;
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.TimeZone;
 
 import kx.c;
 
@@ -99,12 +102,15 @@ public class K4TableModel extends AbstractTableModel implements KTableModel
 
     public K4TableModel()
     {
+        sdf = new SimpleDateFormat("yyyy.MM.dd'T'HH:mm:ss.SSS");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     public K4TableModel( Object obj) throws UnsupportedEncodingException
     {
 //        System.out.println("K4TableModel constructor");
-        setData( obj);
+        this();
+        setData(obj);
     }
 
     public boolean isKey( int column)
@@ -128,14 +134,27 @@ public class K4TableModel extends AbstractTableModel implements KTableModel
 
         Object o = c.at(columns[ col],row);
 
-            if(isObjectArray(o) && isCharArray(o))
+            if(isObjectArray(o) && isCharArray(o)) {
+                o = String.valueOf((char[]) o);
+            } else if ( ( o instanceof java.sql.Date) || (o instanceof java.sql.Timestamp))
             {
-                o = "\"" + String.valueOf((char[]) o) + "\"";
+                return o;
+            } else if ( o instanceof java.util.Date)
+            {
+                return sdf.format(o);
+//                return o;
             }
 
 
         return o;
     }
+
+/*
+    private String date2string(Date d)
+    {
+
+    }
+*/
 
 
     public String getColumnName( int i)
@@ -157,6 +176,7 @@ public class K4TableModel extends AbstractTableModel implements KTableModel
         return "char".equals((o.getClass().getComponentType()).getName());
     }
 
+    private SimpleDateFormat sdf;
 //    private boolean isCharArray(Object o)
 //    {
 //        Object[] oa = null;

@@ -433,6 +433,7 @@ public class Show extends JPanel
                                     try
                                     {
                                         c = new c(s,null);
+                                        c.tz = TimeZone.getTimeZone("GMT");
 
                                         while (true)
                                         {
@@ -472,6 +473,7 @@ public class Show extends JPanel
                                                                 }
                                                                 catch (Exception e)
                                                                 {
+                                                                    System.out.println("Here exception: " + e.getMessage());
                                                                 }
                                                             }
                                                         });
