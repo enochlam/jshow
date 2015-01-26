@@ -136,7 +136,7 @@ public class K4TableModel extends AbstractTableModel implements KTableModel
 
             if(isObjectArray(o) && isCharArray(o)) {
                 o = String.valueOf((char[]) o);
-            } else if ( ( o instanceof java.sql.Date) || (o instanceof java.sql.Timestamp))
+            } else if ( (o instanceof java.sql.Time ) || ( o instanceof java.sql.Date) || (o instanceof java.sql.Timestamp))
             {
                 return o;
             } else if ( o instanceof java.util.Date)
@@ -169,11 +169,11 @@ public class K4TableModel extends AbstractTableModel implements KTableModel
 
     private boolean isObjectArray(Object o)
     {
-        return o.getClass().isArray();
+        return (null == o) ? false : o.getClass().isArray();
     }
     private boolean isCharArray(Object o)
     {
-        return "char".equals((o.getClass().getComponentType()).getName());
+        return (null == o) ? false : "char".equals((o.getClass().getComponentType()).getName());
     }
 
     private SimpleDateFormat sdf;
